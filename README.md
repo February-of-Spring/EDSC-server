@@ -114,4 +114,3 @@ ex) [Request] get-user-history
 |이정원|Back-end|[@jeongwon-iee](https://github.com/jeongwon-iee)|
 |장다솜|Back-end||
 |박주은|Back-end||
-|송유빈|Front-end||
