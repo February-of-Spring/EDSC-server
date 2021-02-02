@@ -14,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue
-    @Column("user_id")
+    @Column(name = "user_id")
     private Long id;
 
     private String email;
