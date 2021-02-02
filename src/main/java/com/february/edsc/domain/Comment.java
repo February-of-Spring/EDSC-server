@@ -25,6 +25,9 @@ public class Comment {
     private boolean isPublic;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
