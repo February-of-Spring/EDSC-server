@@ -21,6 +21,12 @@ public class UserRepository {
         return entityManager.find(User.class, userId);
     }
 
+    public List<User> findByName(String name) {
+        return entityManager.createQuery("select u from User u where u.name = :name", User.class)
+                .setParameter("name", name)
+                .getResultList();
+    }
+
     public List<User> findAll() {
         return entityManager.createQuery("select u from User u", User.class)
                 .getResultList();
