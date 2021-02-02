@@ -47,4 +47,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Image> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<File> files = new ArrayList<>();
+
 }
