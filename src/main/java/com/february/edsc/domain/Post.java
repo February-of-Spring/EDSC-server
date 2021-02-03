@@ -50,4 +50,47 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
 
+    //==연관관계 편의 메서드==//
+    public void setUser(User user) {
+        this.user = user;
+        user.getPosts().add(this);
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getPosts().add(this);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void addImage(Image image) {
+        images.add(image);
+        image.setPost(this);
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setPost(this);
+    }
+
+    //==생성 메서드==//
+    public static Post createPost(User user, Category category, String title, String content, Image[] images, File[] files) {
+        Post post = new Post();
+        post.setUser(user);
+        post.setCategory(category);
+        post.setTitle(title);
+        post.setContent(content);
+        for (Image image : images) {
+            post.addImage(image);
+        }
+        for (File file : files) {
+            post.addFile(file);
+        }
+        post.setCreatedAt(LocalDateTime.now());
+
+        return post;
+    }
 }
