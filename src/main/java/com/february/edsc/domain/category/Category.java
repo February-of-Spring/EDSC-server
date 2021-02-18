@@ -1,5 +1,6 @@
-package com.february.edsc.domain;
+package com.february.edsc.domain.category;
 
+import com.february.edsc.domain.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +13,10 @@ import java.util.List;
 public class Category {
 
     @Id
-    @GeneratedValue
-    @Column(name = "category_id")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String description;
-
     @OneToMany(mappedBy = "category")
     private List<Post> posts = new ArrayList<>();
 }

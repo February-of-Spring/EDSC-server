@@ -1,5 +1,6 @@
-package com.february.edsc.domain;
+package com.february.edsc.domain.post.image;
 
+import com.february.edsc.domain.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,11 +8,10 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class File {
+public class Image {
 
     @Id
-    @GeneratedValue
-    @Column(name = "file_id")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String path;

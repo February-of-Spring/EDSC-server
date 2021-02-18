@@ -1,5 +1,7 @@
-package com.february.edsc.domain;
+package com.february.edsc.domain.user;
 
+import com.february.edsc.domain.user.like.Like;
+import com.february.edsc.domain.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +14,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;

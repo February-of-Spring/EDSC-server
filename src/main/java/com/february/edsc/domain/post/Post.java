@@ -1,9 +1,17 @@
-package com.february.edsc.domain;
+package com.february.edsc.domain.post;
 
+import com.february.edsc.domain.category.Category;
+import com.february.edsc.domain.post.comment.Comment;
+import com.february.edsc.domain.post.file.File;
+import com.february.edsc.domain.post.image.Image;
+import com.february.edsc.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +19,22 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Post {
 
     @Id
-    @GeneratedValue
-    @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
+
     private String content;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "modified_at")
-    private LocalDateTime modified_At;
+    private Timestamp modifiedAt;
 
     @Column(name = "like_count")
     private int likeCount;
@@ -75,22 +84,16 @@ public class Post {
         files.add(file);
         file.setPost(this);
     }
-
-    //==생성 메서드==//
-    public static Post createPost(User user, Category category, String title, String content, Image[] images, File[] files) {
-        Post post = new Post();
-        post.setUser(user);
-        post.setCategory(category);
-        post.setTitle(title);
-        post.setContent(content);
-        for (Image image : images) {
-            post.addImage(image);
-        }
-        for (File file : files) {
-            post.addFile(file);
-        }
-        post.setCreatedAt(LocalDateTime.now());
-
-        return post;
+    @Builder
+    public Post(String title, String content, User user,
+                Category category, List<Image> images, List<File> files) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.modifiedAt = new Timestamp(System.currentTimeMillis());
+        this.category = category;
+        this.images = images;
+        this.files = files;
     }
 }
