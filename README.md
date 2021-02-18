@@ -2,7 +2,7 @@
 <img width="882" alt="스크린샷 2021-01-30 오후 3 30 50" src="https://user-images.githubusercontent.com/45806836/106349281-25383800-6310-11eb-9265-1906ec554501.png">
 
 ## 공개 주소 ✨ 
-  
+
 배포 URL:
 
 &nbsp;
@@ -113,4 +113,4 @@ ex) [Request] get-user-history
 |--|--|--|
 |이정원|Back-end|[@jeongwon-iee](https://github.com/jeongwon-iee)|
 |장다솜|Back-end||
-|박주은|Back-end||
+|박주은|Back-end|[@hoit1302](https://github.com/hoit1302)|
