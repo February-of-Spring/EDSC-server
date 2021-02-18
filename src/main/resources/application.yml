@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/edsc
-    username: sa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
     password:
-    driver-class-name: org.h2.Driver
-
   jpa:
+    database: mysql
     hibernate:
       ddl-auto: create
     properties:
