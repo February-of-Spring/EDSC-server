@@ -1,6 +1,6 @@
 package com.february.edsc.service;
 
-import com.february.edsc.domain.User;
+import com.february.edsc.domain.user.User;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;

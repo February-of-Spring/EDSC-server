@@ -1,6 +1,6 @@
 package com.february.edsc.repository;
 
-import com.february.edsc.domain.User;
+import com.february.edsc.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
