@@ -11,7 +11,7 @@ CREATE TABLE comment
     id          BIGINT NOT NULL AUTO_INCREMENT,
     content     VARCHAR(255),
     is_public   BIT,
-    like_count  INTEGER,
+    like_count  INTEGER DEFAULT 0,
     created_at  TIMESTAMP,
     modified_at TIMESTAMP,
     parent_id   BIGINT,
@@ -38,12 +38,12 @@ CREATE TABLE liked
 CREATE TABLE post
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
-    content     VARCHAR(255),
+    content     TEXT NOT NULL,
     created_at  TIMESTAMP,
-    like_count  INTEGER,
+    like_count  INTEGER DEFAULT 0,
     modified_at TIMESTAMP,
-    title       VARCHAR(255),
-    view_count  INTEGER,
+    title       VARCHAR(255) NOT NULL,
+    view_count  INTEGER DEFAULT 0,
     category_id BIGINT,
     user_id     BIGINT,
     PRIMARY KEY (id)
