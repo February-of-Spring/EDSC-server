@@ -112,4 +112,11 @@ public class Post {
     public void upViewCount() {
         viewCount++;
     }
+
+    public void updatePost(PostRequestDto postRequestDto, Category category) {
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.modifiedAt = new Timestamp(System.currentTimeMillis());
+        this.category = category;
+    }
 }
