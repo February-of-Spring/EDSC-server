@@ -1,5 +1,7 @@
 package com.february.edsc.controller;
 
+import com.february.edsc.common.Error;
+import com.february.edsc.common.ErrorMessage;
 import com.february.edsc.domain.post.PostRequestDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.service.PostService;
@@ -24,7 +26,8 @@ public class PostController {
 	public ResponseEntity<Object> createPost(@RequestBody PostRequestDto postRequestDto) {
 		Optional<User> user = userService.findByEmail(postRequestDto.getEmail());
 		if (user.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 유저입니다.");
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
 		}
 		String postId = postService.createPost(postRequestDto, user.get());
 		URI location = URI.create("/posts/" + postId);
