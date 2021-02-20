@@ -53,4 +53,14 @@ public class PostController {
 		postService.updatePost(post.get(), postRequestDto);
 		return ResponseEntity.ok().build();
 	}
+
+	@DeleteMapping("/posts/{id}")
+	public ResponseEntity<Object> deletePost(@PathVariable Long id) {
+		Optional<Post> post = postService.getPost(id);
+		if (post.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
+		postService.deletePost(post.get());
+		return ResponseEntity.noContent().build();
+	}
 }
