@@ -1,5 +1,7 @@
-package com.february.edsc.domain;
+package com.february.edsc.domain.user.like;
 
+import com.february.edsc.domain.post.Post;
+import com.february.edsc.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +14,7 @@ import javax.persistence.*;
 public class Like {
 
     @Id
-    @GeneratedValue
-    @Column(name = "like_id")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
