@@ -42,4 +42,15 @@ public class PostController {
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
 		return ResponseEntity.ok().body(postService.toPostResponseDto(post.get()));
 	}
+
+	@PutMapping("/posts/{id}")
+	public ResponseEntity<Object> getPost(@PathVariable Long id,
+		@RequestBody PostRequestDto postRequestDto) {
+		Optional<Post> post = postService.getPost(id);
+		if (post.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
+		postService.updatePost(post.get(), postRequestDto);
+		return ResponseEntity.ok().build();
+	}
 }
