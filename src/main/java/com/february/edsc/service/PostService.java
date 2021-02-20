@@ -54,4 +54,10 @@ public class PostService {
 		post.upViewCount();
 		return post.toPostResponseDto();
 	}
+
+	@Transactional
+	public void updatePost(Post post, PostRequestDto postRequestDto) {
+		Category category = getCategory(postRequestDto.getCategoryName());
+		post.updatePost(postRequestDto, category);
+	}
 }
