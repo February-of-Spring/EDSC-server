@@ -30,16 +30,12 @@ public class Post {
 
     private String content;
 
-    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name = "modified_at")
     private Timestamp modifiedAt;
 
-    @Column(name = "like_count")
     private int likeCount;
 
-    @Column(name = "view_count")
     private int viewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,6 +80,7 @@ public class Post {
         files.add(file);
         file.setPost(this);
     }
+
     @Builder
     public Post(String title, String content, User user,
                 Category category, List<Image> images, List<File> files) {
@@ -95,5 +92,24 @@ public class Post {
         this.category = category;
         this.images = images;
         this.files = files;
+    }
+
+    public PostResponseDto toPostResponseDto() {
+        return PostResponseDto.builder()
+            .user(user.toUserResponseDto())
+            .title(title)
+            .content(content)
+            .likeCount(likeCount)
+            .viewCount(viewCount)
+            .createdAt(createdAt)
+            .modifiedAt(modifiedAt)
+            .category(category.getName())
+//            .images()
+//            .files()
+            .build();
+    }
+
+    public void upViewCount() {
+        viewCount++;
     }
 }
