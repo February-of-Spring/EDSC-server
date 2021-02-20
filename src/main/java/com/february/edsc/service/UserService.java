@@ -1,12 +1,14 @@
 package com.february.edsc.service;
 
 import com.february.edsc.domain.user.User;
+import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -14,6 +16,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Transactional
     public Long join(User user) {
@@ -38,5 +41,9 @@ public class UserService {
     // 단건 조회
     public User findOne(Long memberId) {
         return userRepository.findOne(memberId);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepository.findByEmail(email);
     }
 }
