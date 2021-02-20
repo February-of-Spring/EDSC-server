@@ -3,8 +3,10 @@ package com.february.edsc.service;
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostRequestDto;
+import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.repository.CategoryJpaRepository;
+import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class PostService {
 	private final CategoryJpaRepository categoryJpaRepository;
 	private final PostRepository postRepository;
+	private final PostJpaRepository postJpaRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user) {
@@ -34,10 +37,21 @@ public class PostService {
 		return postId.toString();
 	}
 
-	private Category getCategory(String categoryName) {
+	@Transactional
+	public Category getCategory(String categoryName) {
 		Optional<Category> category = categoryJpaRepository.findByName(categoryName);
 		if (category.isEmpty())
 			return categoryJpaRepository.save(Category.builder().name(categoryName).build());
 		return category.get();
+	}
+
+	public Optional<Post> getPost(Long id) {
+		return postJpaRepository.findById(id);
+	}
+
+	@Transactional
+	public PostResponseDto toPostResponseDto(Post post) {
+		post.upViewCount();
+		return post.toPostResponseDto();
 	}
 }
