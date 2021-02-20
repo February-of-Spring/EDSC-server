@@ -60,4 +60,8 @@ public class PostService {
 		Category category = getCategory(postRequestDto.getCategoryName());
 		post.updatePost(postRequestDto, category);
 	}
+	
+	public void deletePost(Post post) {
+		postJpaRepository.delete(post);
+	}
 }
