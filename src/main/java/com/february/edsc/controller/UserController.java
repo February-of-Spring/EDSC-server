@@ -19,6 +19,15 @@ public class UserController {
 
 	private final UserService userService;
 
+	@GetMapping("/users/{id}")
+	public ResponseEntity<Object> getUser(@PathVariable Long id) {
+		Optional<User> user = userService.findById(id);
+		if (user.isEmpty()) {
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		} return ResponseEntity.ok().body(user.get().toUserDetailResponseDto());
+	}
+
 	@GetMapping("/users/{id}/posts")
 	public ResponseEntity<Object> getUserPosts(@PathVariable Long id) {
 		Optional<User> user = userService.findById(id);
