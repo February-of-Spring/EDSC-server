@@ -1,26 +1,10 @@
 package com.february.edsc.repository;
 
 import com.february.edsc.domain.post.Post;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-import javax.persistence.EntityManager;
+import java.util.List;
 
-@Repository
-@RequiredArgsConstructor
-public class PostRepository {
-
-    private final EntityManager entityManager;
-
-    public Long save(Post post) {
-        entityManager.persist(post);
-        return post.getId();
-    }
-
-    public Post findOne(Long id) {
-        return entityManager.find(Post.class, id);
-    }
-//    public List<Post> searchAll(PostSearch postSearch) {
-//
-//    }
+public interface PostRepository extends CrudRepository<Post, Long> {
+	List<Post> findAllByUserId(Long userId);
 }

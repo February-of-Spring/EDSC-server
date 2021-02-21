@@ -7,9 +7,7 @@ import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
-import com.february.edsc.repository.CategoryRepository;
 import com.february.edsc.repository.LikeRepository;
-import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,13 +20,11 @@ import java.util.Optional;
 public class PostService {
 
 	private final PostRepository postRepository;
-	private final PostJpaRepository postJpaRepository;
 	private final LikeRepository likeRepository;
-	private final CategoryRepository categoryRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
-		Long postId = postRepository.save(
+		Post post = postRepository.save(
 			Post.builder()
 				.user(user)
 				.title(postRequestDto.getTitle())
@@ -38,11 +34,11 @@ public class PostService {
 //				.files(postRequestDto.getFiles())
 				.build()
 		);
-		return postId.toString();
+		return post.getId().toString();
 	}
 
 	public Optional<Post> findById(Long id) {
-		return postJpaRepository.findById(id);
+		return postRepository.findById(id);
 	}
 
 	@Transactional
@@ -57,7 +53,7 @@ public class PostService {
 	}
 
 	public void deletePost(Post post) {
-		postJpaRepository.delete(post);
+		postRepository.delete(post);
 	}
 
 	@Transactional

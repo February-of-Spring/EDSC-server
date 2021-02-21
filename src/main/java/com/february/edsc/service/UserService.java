@@ -9,7 +9,7 @@ import com.february.edsc.domain.user.UserListResponseDto;
 import com.february.edsc.domain.user.UserUpdateDto;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.repository.LikeRepository;
-import com.february.edsc.repository.PostJpaRepository;
+import com.february.edsc.repository.PostRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
-    private final PostJpaRepository postJpaRepository;
+    private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
     @Transactional
@@ -57,7 +57,7 @@ public class UserService {
     @Transactional
     public PostListResponseDto getUserPosts(Long userId) {
         List<PostResponseDto> posts =
-            postJpaRepository.findAllByUserId(userId).stream()
+            postRepository.findAllByUserId(userId).stream()
                 .map(Post::toPostResponseDto).collect(Collectors.toList());
         return PostListResponseDto.builder()
             .totalNum(posts.size())
