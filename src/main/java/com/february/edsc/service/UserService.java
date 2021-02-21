@@ -7,7 +7,7 @@ import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.UserDetailResponseDto;
 import com.february.edsc.domain.user.UserListResponseDto;
 import com.february.edsc.domain.user.like.Like;
-import com.february.edsc.repository.LikeJpaRepository;
+import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
@@ -28,7 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
     private final PostJpaRepository postJpaRepository;
-    private final LikeJpaRepository likeJpaRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public Long join(User user) {
@@ -67,7 +67,7 @@ public class UserService {
     @Transactional
     public PostListResponseDto getUserLikes(Long userId) {
         List<PostResponseDto> posts =
-            likeJpaRepository.findAllByUserId(userId).stream()
+            likeRepository.findAllByUserId(userId).stream()
             .map(Like::getPost).map(Post::toPostResponseDto)
             .collect(Collectors.toList());
         return PostListResponseDto.builder()
