@@ -24,6 +24,9 @@ public class PostController {
 
 	@PostMapping("/posts")
 	public ResponseEntity<Object> createPost(@RequestBody PostRequestDto postRequestDto) {
+		if (postRequestDto.isRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
 		Optional<User> user = userService.findByEmail(postRequestDto.getEmail());
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
@@ -46,6 +49,9 @@ public class PostController {
 	@PutMapping("/posts/{id}")
 	public ResponseEntity<Object> getPost(@PathVariable Long id,
 		@RequestBody PostRequestDto postRequestDto) {
+		if (postRequestDto.isRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
 		Optional<Post> post = postService.findById(id);
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
