@@ -27,8 +27,7 @@ public class PostService {
 	private final CategoryJpaRepository categoryJpaRepository;
 
 	@Transactional
-	public String createPost(PostRequestDto postRequestDto, User user) {
-		Category category = getCategory(postRequestDto.getCategoryName());
+	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
 		Long postId = postRepository.save(
 			Post.builder()
 				.user(user)
@@ -42,14 +41,6 @@ public class PostService {
 		return postId.toString();
 	}
 
-	@Transactional
-	public Category getCategory(String categoryName) {
-		Optional<Category> category = categoryJpaRepository.findByName(categoryName);
-		if (category.isEmpty())
-			return categoryJpaRepository.save(Category.builder().name(categoryName).build());
-		return category.get();
-	}
-
 	public Optional<Post> findById(Long id) {
 		return postJpaRepository.findById(id);
 	}
@@ -61,8 +52,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Post post, PostRequestDto postRequestDto) {
-		Category category = getCategory(postRequestDto.getCategoryName());
+	public void updatePost(Post post, PostRequestDto postRequestDto, Category category) {
 		post.updatePost(postRequestDto, category);
 	}
 
