@@ -28,6 +28,11 @@ public class UserController {
 		} return ResponseEntity.ok().body(user.get().toUserDetailResponseDto());
 	}
 
+	@GetMapping("/users")
+	public ResponseEntity<Object> getUsers() {
+		return ResponseEntity.ok().body(userService.getUsers());
+	}
+
 	@GetMapping("/users/{id}/posts")
 	public ResponseEntity<Object> getUserPosts(@PathVariable Long id) {
 		Optional<User> user = userService.findById(id);
