@@ -1,16 +1,21 @@
 package com.february.edsc.service;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
 import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.UserDetailResponseDto;
 import com.february.edsc.domain.user.UserListResponseDto;
+import com.february.edsc.domain.user.UserUpdateDto;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.repository.LikeJpaRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,5 +89,10 @@ public class UserService {
             .totalNum(users.size())
             .userList(users)
             .build();
+    }
+
+    @Transactional
+    public void updateUser(User user, UserUpdateDto userUpdateDto) {
+        user.updateUser(userUpdateDto);
     }
 }
