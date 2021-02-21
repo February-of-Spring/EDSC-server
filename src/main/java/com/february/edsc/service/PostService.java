@@ -7,8 +7,8 @@ import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
-import com.february.edsc.repository.CategoryJpaRepository;
-import com.february.edsc.repository.LikeJpaRepository;
+import com.february.edsc.repository.CategoryRepository;
+import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
@@ -23,8 +23,8 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final PostJpaRepository postJpaRepository;
-	private final LikeJpaRepository likeJpaRepository;
-	private final CategoryJpaRepository categoryJpaRepository;
+	private final LikeRepository likeRepository;
+	private final CategoryRepository categoryRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
@@ -62,9 +62,9 @@ public class PostService {
 
 	@Transactional
 	public LikeResponseDto likePost(Post post, User user) {
-		if (likeJpaRepository.findByPostIdAndUserId(post.getId(), user.getId()).isPresent())
+		if (likeRepository.findByPostIdAndUserId(post.getId(), user.getId()).isPresent())
 			return post.toLikeResponseDto(post);
-		likeJpaRepository.save(Like.builder()
+		likeRepository.save(Like.builder()
 			.post(post)
 			.user(user)
 			.build()
@@ -76,10 +76,10 @@ public class PostService {
 	@Transactional
 	public LikeResponseDto notLikePost(Post post, User user) {
 		Optional<Like> like =
-			likeJpaRepository.findByPostIdAndUserId(post.getId(), user.getId());
+			likeRepository.findByPostIdAndUserId(post.getId(), user.getId());
 		if (like.isEmpty())
 			return post.toLikeResponseDto(post);
-		likeJpaRepository.delete(like.get());
+		likeRepository.delete(like.get());
 		post.downLikeCount();
 		return post.toLikeResponseDto(post);
 	}

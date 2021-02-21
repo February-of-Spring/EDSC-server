@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface LikeJpaRepository extends CrudRepository<Like, Long> {
+public interface LikeRepository extends CrudRepository<Like, Long> {
 	List<Like> findAllByUserId(Long userId);
 	Optional<Like> findByPostIdAndUserId(Long postId, Long UserId);
 }

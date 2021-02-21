@@ -1,8 +1,5 @@
 package com.february.edsc.service;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
 import com.february.edsc.domain.post.PostResponseDto;
@@ -11,11 +8,10 @@ import com.february.edsc.domain.user.UserDetailResponseDto;
 import com.february.edsc.domain.user.UserListResponseDto;
 import com.february.edsc.domain.user.UserUpdateDto;
 import com.february.edsc.domain.user.like.Like;
-import com.february.edsc.repository.LikeJpaRepository;
+import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
     private final PostJpaRepository postJpaRepository;
-    private final LikeJpaRepository likeJpaRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public Long join(User user) {
@@ -72,7 +68,7 @@ public class UserService {
     @Transactional
     public PostListResponseDto getUserLikes(Long userId) {
         List<PostResponseDto> posts =
-            likeJpaRepository.findAllByUserId(userId).stream()
+            likeRepository.findAllByUserId(userId).stream()
             .map(Like::getPost).map(Post::toPostResponseDto)
             .collect(Collectors.toList());
         return PostListResponseDto.builder()
