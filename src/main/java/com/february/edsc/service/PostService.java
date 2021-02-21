@@ -7,7 +7,7 @@ import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
-import com.february.edsc.repository.CategoryJpaRepository;
+import com.february.edsc.repository.CategoryRepository;
 import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
@@ -24,7 +24,7 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final PostJpaRepository postJpaRepository;
 	private final LikeRepository likeRepository;
-	private final CategoryJpaRepository categoryJpaRepository;
+	private final CategoryRepository categoryRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user) {
@@ -44,9 +44,9 @@ public class PostService {
 
 	@Transactional
 	public Category getCategory(String categoryName) {
-		Optional<Category> category = categoryJpaRepository.findByName(categoryName);
+		Optional<Category> category = categoryRepository.findByName(categoryName);
 		if (category.isEmpty())
-			return categoryJpaRepository.save(Category.builder().name(categoryName).build());
+			return categoryRepository.save(Category.builder().name(categoryName).build());
 		return category.get();
 	}
 
