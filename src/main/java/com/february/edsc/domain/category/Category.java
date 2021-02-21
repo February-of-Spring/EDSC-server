@@ -39,7 +39,7 @@ public class Category {
             .id(id)
             .name(name)
             .level(level)
-            .parentCategoryId(parent.id)
+            .parentCategoryId(parent.getId())
             .build();
     }
 }
