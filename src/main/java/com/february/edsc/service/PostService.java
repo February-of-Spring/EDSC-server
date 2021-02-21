@@ -5,7 +5,10 @@ import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostRequestDto;
 import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
+import com.february.edsc.domain.user.like.Like;
+import com.february.edsc.domain.user.like.LikeResponseDto;
 import com.february.edsc.repository.CategoryJpaRepository;
+import com.february.edsc.repository.LikeJpaRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
@@ -17,9 +20,11 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PostService {
-	private final CategoryJpaRepository categoryJpaRepository;
+
 	private final PostRepository postRepository;
 	private final PostJpaRepository postJpaRepository;
+	private final LikeJpaRepository likeJpaRepository;
+	private final CategoryJpaRepository categoryJpaRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user) {
@@ -45,7 +50,7 @@ public class PostService {
 		return category.get();
 	}
 
-	public Optional<Post> getPost(Long id) {
+	public Optional<Post> findById(Long id) {
 		return postJpaRepository.findById(id);
 	}
 
@@ -60,8 +65,32 @@ public class PostService {
 		Category category = getCategory(postRequestDto.getCategoryName());
 		post.updatePost(postRequestDto, category);
 	}
-	
+
 	public void deletePost(Post post) {
 		postJpaRepository.delete(post);
+	}
+
+	@Transactional
+	public LikeResponseDto likePost(Post post, User user) {
+		if (likeJpaRepository.findByPostIdAndUserId(post.getId(), user.getId()).isPresent())
+			return post.toLikeResponseDto(post);
+		likeJpaRepository.save(Like.builder()
+			.post(post)
+			.user(user)
+			.build()
+		);
+		post.upLikeCount();
+		return post.toLikeResponseDto(post);
+	}
+
+	@Transactional
+	public LikeResponseDto notLikePost(Post post, User user) {
+		Optional<Like> like =
+			likeJpaRepository.findByPostIdAndUserId(post.getId(), user.getId());
+		if (like.isEmpty())
+			return post.toLikeResponseDto(post);
+		likeJpaRepository.delete(like.get());
+		post.downLikeCount();
+		return post.toLikeResponseDto(post);
 	}
 }

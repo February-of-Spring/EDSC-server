@@ -24,6 +24,9 @@ public class PostController {
 
 	@PostMapping("/posts")
 	public ResponseEntity<Object> createPost(@RequestBody PostRequestDto postRequestDto) {
+		if (postRequestDto.isRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
 		Optional<User> user = userService.findByEmail(postRequestDto.getEmail());
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
@@ -36,7 +39,7 @@ public class PostController {
 
 	@GetMapping("/posts/{id}")
 	public ResponseEntity<Object> getPost(@PathVariable Long id) {
-		Optional<Post> post = postService.getPost(id);
+		Optional<Post> post = postService.findById(id);
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
@@ -46,7 +49,10 @@ public class PostController {
 	@PutMapping("/posts/{id}")
 	public ResponseEntity<Object> getPost(@PathVariable Long id,
 		@RequestBody PostRequestDto postRequestDto) {
-		Optional<Post> post = postService.getPost(id);
+		if (postRequestDto.isRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
+		Optional<Post> post = postService.findById(id);
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
@@ -56,11 +62,43 @@ public class PostController {
 
 	@DeleteMapping("/posts/{id}")
 	public ResponseEntity<Object> deletePost(@PathVariable Long id) {
-		Optional<Post> post = postService.getPost(id);
+		Optional<Post> post = postService.findById(id);
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
 		postService.deletePost(post.get());
 		return ResponseEntity.noContent().build();
+	}
+
+	// Todo: fix, "POST /posts/{id}/likes"
+	@PostMapping("{userId}/posts/{id}/likes")
+	public ResponseEntity<Object> likePost(@PathVariable Long userId, @PathVariable Long id) {
+		Optional<Post> post = postService.findById(id);
+		if (post.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
+
+		// ToDo: fix, get Logged-in Member
+		Optional<User> user = userService.findById(userId);
+		if (user.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		return ResponseEntity.ok().body(postService.likePost(post.get(), user.get()));
+	}
+
+	// Todo: fix, "DELETE /posts/{id}/likes"
+	@DeleteMapping("{userId}/posts/{id}/likes")
+	public ResponseEntity<Object> notLikePost(@PathVariable Long userId, @PathVariable Long id) {
+		Optional<Post> post = postService.findById(id);
+		if (post.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
+
+		// ToDo: fix, get Logged-in Member
+		Optional<User> user = userService.findById(userId);
+		if (user.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		return ResponseEntity.ok().body(postService.notLikePost(post.get(), user.get()));
 	}
 }

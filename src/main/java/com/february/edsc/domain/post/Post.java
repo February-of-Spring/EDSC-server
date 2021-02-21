@@ -5,6 +5,7 @@ import com.february.edsc.domain.post.comment.Comment;
 import com.february.edsc.domain.post.file.File;
 import com.february.edsc.domain.post.image.Image;
 import com.february.edsc.domain.user.User;
+import com.february.edsc.domain.user.like.LikeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -118,5 +119,19 @@ public class Post {
         this.content = postRequestDto.getContent();
         this.modifiedAt = new Timestamp(System.currentTimeMillis());
         this.category = category;
+    }
+
+    public int upLikeCount() {
+        return ++likeCount;
+    }
+
+    public int downLikeCount() {
+        return --likeCount;
+    }
+
+    public LikeResponseDto toLikeResponseDto(Post post) {
+        return LikeResponseDto.builder()
+            .likeCount(post.likeCount)
+            .build();
     }
 }

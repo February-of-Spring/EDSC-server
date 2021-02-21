@@ -40,4 +40,14 @@ public class User {
             .profileImage(profileImage)
             .build();
 	}
+
+    public UserDetailResponseDto toUserDetailResponseDto() {
+        return UserDetailResponseDto.builder()
+            .email(email)
+            .name(name)
+            .nickname(nickname)
+            .phone(phone)
+            .profileImage(profileImage)
+            .build();
+    }
 }
