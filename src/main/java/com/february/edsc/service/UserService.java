@@ -62,9 +62,14 @@ public class UserService {
     }
 
     @Transactional
-    public List<PostResponseDto> getUserLikes(Long userId) {
-        return likeJpaRepository.findAllByUserId(userId).stream()
+    public PostListResponseDto getUserLikes(Long userId) {
+        List<PostResponseDto> posts =
+            likeJpaRepository.findAllByUserId(userId).stream()
             .map(Like::getPost).map(Post::toPostResponseDto)
             .collect(Collectors.toList());
+        return PostListResponseDto.builder()
+            .totalNum(posts.size())
+            .postList(posts)
+            .build();
     }
 }
