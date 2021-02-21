@@ -16,4 +16,11 @@ public class PostRequestDto {
 	private final String categoryName;
 	private final List<String> images;
 	private final List<String> files;
+
+	public boolean isRequiredFieldNull() {
+		return (email == null) || (email.isEmpty()) ||
+			(title == null) || (title.isEmpty()) ||
+			(content == null) || (content.isEmpty()) ||
+			(categoryName == null) || (categoryName.isEmpty());
+	}
 }
