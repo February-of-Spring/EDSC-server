@@ -4,6 +4,8 @@ import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
 import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
+import com.february.edsc.domain.user.like.Like;
+import com.february.edsc.repository.LikeJpaRepository;
 import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
@@ -23,6 +25,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
     private final PostJpaRepository postJpaRepository;
+    private final LikeJpaRepository likeJpaRepository;
 
     @Transactional
     public Long join(User user) {
@@ -43,18 +46,25 @@ public class UserService {
         return userJpaRepository.findByEmail(email);
     }
     
-    public Optional<User> findById(Long memberId) {
-        return userJpaRepository.findById(memberId);
+    public Optional<User> findById(Long userId) {
+        return userJpaRepository.findById(userId);
     }
 
     @Transactional
-    public PostListResponseDto getUserPosts(Long memberId) {
+    public PostListResponseDto getUserPosts(Long userId) {
         List<PostResponseDto> posts =
-            postJpaRepository.findAllByUserId(memberId).stream()
+            postJpaRepository.findAllByUserId(userId).stream()
                 .map(Post::toPostResponseDto).collect(Collectors.toList());
         return PostListResponseDto.builder()
             .totalNum(posts.size())
             .postList(posts)
             .build();
+    }
+
+    @Transactional
+    public List<PostResponseDto> getUserLikes(Long userId) {
+        return likeJpaRepository.findAllByUserId(userId).stream()
+            .map(Like::getPost).map(Post::toPostResponseDto)
+            .collect(Collectors.toList());
     }
 }
