@@ -4,6 +4,8 @@ import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
 import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
+import com.february.edsc.domain.user.UserDetailResponseDto;
+import com.february.edsc.domain.user.UserListResponseDto;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.repository.LikeJpaRepository;
 import com.february.edsc.repository.PostJpaRepository;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,6 +73,16 @@ public class UserService {
         return PostListResponseDto.builder()
             .totalNum(posts.size())
             .postList(posts)
+            .build();
+    }
+
+    public Object getUsers() {
+        List<UserDetailResponseDto> users = new ArrayList<>();
+        userJpaRepository.findAll()
+            .forEach(user -> users.add(user.toUserDetailResponseDto()));
+        return UserListResponseDto.builder()
+            .totalNum(users.size())
+            .userList(users)
             .build();
     }
 }
