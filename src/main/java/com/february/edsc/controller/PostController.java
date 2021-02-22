@@ -36,7 +36,7 @@ public class PostController {
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
 		}
 		Optional<Category> category
-			= categoryService.findByName(postRequestDto.getCategoryName());
+			= categoryService.findByLevelAndName(2, postRequestDto.getCategoryName());
 		if (category.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
@@ -64,7 +64,7 @@ public class PostController {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
 		Optional<Category> category
-			= categoryService.findByName(postRequestDto.getCategoryName());
+			= categoryService.findByLevelAndName(2, postRequestDto.getCategoryName());
 		if (category.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));

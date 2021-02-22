@@ -57,4 +57,8 @@ public class Category {
     public void setParent(Category category) {
         this.parent = category;
     }
+
+    public void updateCategory(CategoryRequestDto categoryRequestDto) {
+        this.name = categoryRequestDto.getName();
+    }
 }
