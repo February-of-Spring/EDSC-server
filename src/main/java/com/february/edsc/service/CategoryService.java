@@ -1,9 +1,6 @@
 package com.february.edsc.service;
 
-import com.february.edsc.domain.category.CategoryPackResponseDto;
-import com.february.edsc.domain.category.Category;
-import com.february.edsc.domain.category.CategoryRequestDto;
-import com.february.edsc.domain.category.CategoryResponseDto;
+import com.february.edsc.domain.category.*;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
 import com.february.edsc.domain.post.PostResponseDto;
@@ -20,14 +17,6 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
 	private final CategoryRepository categoryRepository;
-
-	public Optional<Category> findByName(String categoryName) {
-		return categoryRepository.findByName(categoryName);
-	}
-
-	public Optional<Category> findById(Long parentId) {
-		return categoryRepository.findById(parentId);
-	}
 
 	@Transactional
 	public List<CategoryPackResponseDto> getCategories() {
@@ -97,11 +86,32 @@ public class CategoryService {
 		return category.getName();
 	}
 
+	public Optional<Category> findById(Long parentId) {
+		return categoryRepository.findById(parentId);
+	}
+
 	public void deleteCategory(Category category) {
 		categoryRepository.delete(category);
 	}
 
 	public List<Category> findAllByParentId(Category category) {
 		return categoryRepository.findAllByParentId(category.getId());
+	}
+
+	public List<Category> findAllByLevel(int level) {
+		return categoryRepository.findAllByLevel(level);
+	}
+
+	@Transactional
+	public void updateCategory(Category category, CategoryRequestDto categoryRequestDto) {
+		category.updateCategory(categoryRequestDto);
+	}
+
+	public List<Category> findAllByParentIdAndLevel(Long id, int level) {
+		return categoryRepository.findAllByParentIdAndLevel(id, level);
+	}
+
+	public Optional<Category> findByLevelAndName(int level, String name) {
+		return categoryRepository.findByLevelAndName(level, name);
 	}
 }
