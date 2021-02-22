@@ -3,6 +3,7 @@ package com.february.edsc.controller;
 import com.february.edsc.common.Error;
 import com.february.edsc.common.ErrorMessage;
 import com.february.edsc.domain.category.Category;
+import com.february.edsc.domain.category.CategoryRequestDto;
 import com.february.edsc.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Controller
@@ -40,5 +46,35 @@ public class CategoryController {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
 		return ResponseEntity.ok().body(categoryService.getPostsByChildCategory(category2.get()));
+	}
+
+	@PostMapping("/category")
+	public ResponseEntity<Object> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
+		if (categoryRequestDto.isRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
+		Optional<Category> category
+			= categoryService.findByName(categoryRequestDto.getName());
+
+		String result;
+		if (categoryRequestDto.getLevel() == 2) {
+			if (category.isPresent() &&
+				category.get().getParent().getId().equals(categoryRequestDto.getParentId()))
+				return ResponseEntity.badRequest()
+					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.DUPLICATE_CATEGORY));
+			Optional<Category> parentCategory
+				= categoryService.findById(categoryRequestDto.getParentId());
+			if (parentCategory.isEmpty())
+				return ResponseEntity.badRequest()
+					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_PARENT_CATEGORY));
+			result = categoryService.createCategoryChild(categoryRequestDto, parentCategory.get());
+		} else {
+			if (category.isPresent() && category.get().getLevel() == 1)
+				return ResponseEntity.badRequest()
+					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.DUPLICATE_CATEGORY));
+			result = categoryService.createCategoryParent(categoryRequestDto);
+		}
+		result = URLEncoder.encode("/category/" + result, StandardCharsets.UTF_8);
+		return ResponseEntity.created(URI.create(result)).build();
 	}
 }
