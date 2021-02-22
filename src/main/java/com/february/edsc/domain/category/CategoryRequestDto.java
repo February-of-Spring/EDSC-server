@@ -21,4 +21,8 @@ public class CategoryRequestDto {
 		else
 			return (name == null) || (name.isEmpty()) || (parentId == null);
 	}
+
+	public boolean isUpdatingRequiredFieldNull() {
+		return (name == null) || (name.isEmpty());
+	}
 }
