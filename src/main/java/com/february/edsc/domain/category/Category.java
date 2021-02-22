@@ -53,4 +53,8 @@ public class Category {
             .parentCategoryId(parent.getId())
             .build();
     }
+
+    public void setParent(Category category) {
+        this.parent = category;
+    }
 }
