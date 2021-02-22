@@ -66,20 +66,20 @@ public class Post {
         category.getPosts().add(this);
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setPost(this);
-    }
-
-    public void addImage(Image image) {
-        images.add(image);
-        image.setPost(this);
-    }
-
-    public void addFile(File file) {
-        files.add(file);
-        file.setPost(this);
-    }
+//    public void addComment(Comment comment) {
+//        comments.add(comment);
+//        comment.setPost(this);
+//    }
+//
+//    public void addImage(Image image) {
+//        images.add(image);
+//        image.setPost(this);
+//    }
+//
+//    public void addFile(File file) {
+//        files.add(file);
+//        file.setPost(this);
+//    }
 
     @Builder
     public Post(String title, String content, User user,
