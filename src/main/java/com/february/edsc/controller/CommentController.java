@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URI;
@@ -59,5 +60,24 @@ public class CommentController {
 			commentId = commentService.createComment(commentRequestDto, user.get(), post.get());
 		return ResponseEntity.created(
 			URI.create("/posts/" + postId + "/comments" + commentId)).build();
+	}
+
+	@PutMapping("/posts/{postId}/comments/{commentId}")
+	public ResponseEntity<Object> updateCategory(
+		@PathVariable Long postId,
+		@PathVariable Long commentId,
+		@RequestBody CommentRequestDto commentRequestDto) {
+		if (commentRequestDto.isUpdatingRequiredFieldNull())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
+		Optional<Comment> comment = commentService.findById(commentId);
+		if (comment.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_COMMENT));
+		if (!comment.get().getPost().getId().equals(postId))
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.BAD_REQUEST));
+		commentService.updateComment(comment.get(), commentRequestDto);
+		return ResponseEntity.ok().build();
 	}
 }
