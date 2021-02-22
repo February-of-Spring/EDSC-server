@@ -71,10 +71,29 @@ public class CommentController {
 		if (comment.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_COMMENT));
+		Optional<User> user = userService.findByEmail(commentRequestDto.getEmail());
+		if (user.isEmpty() || !user.get().getEmail().equals(commentRequestDto.getEmail()))
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.UNAUTHORIZED, ErrorMessage.UNAUTHORIZED_TO_UPDATE));
 		if (!comment.get().getPost().getId().equals(postId))
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.BAD_REQUEST));
 		commentService.updateComment(comment.get(), commentRequestDto);
 		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping("/posts/{postId}/comments/{commentId}")
+	public ResponseEntity<Object> deleteComment(
+		@PathVariable Long postId, @PathVariable Long commentId) {
+		Optional<Comment> comment = commentService.findById(commentId);
+		if (comment.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_COMMENT));
+		// ToDo: check UNAUTHORIZED, return ErrorMessage.UNAUTHORIZED_TO_DELETE
+		if (!comment.get().getPost().getId().equals(postId))
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.BAD_REQUEST));
+		commentService.deleteComment(comment.get());
+		return ResponseEntity.noContent().build();
 	}
 }
