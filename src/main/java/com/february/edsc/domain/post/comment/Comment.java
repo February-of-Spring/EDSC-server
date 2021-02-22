@@ -60,4 +60,9 @@ public class Comment {
         this.parent = parent;
         this.user = user;
     }
+
+    public void updateComment(CommentRequestDto commentRequestDto) {
+        content = commentRequestDto.getContent();
+        isPublic = commentRequestDto.getIsPublic();
+    }
 }
