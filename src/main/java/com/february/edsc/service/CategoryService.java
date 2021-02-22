@@ -28,7 +28,7 @@ public class CategoryService {
 	public Optional<Category> findById(Long parentId) {
 		return categoryRepository.findById(parentId);
 	}
-	
+
 	@Transactional
 	public List<CategoryPackResponseDto> getCategories() {
 		List<CategoryPackResponseDto> categoryPackResponseDtoList = new ArrayList<>();
@@ -95,5 +95,13 @@ public class CategoryService {
 			.build());
 		category.setParent(category);
 		return category.getName();
+	}
+
+	public void deleteCategory(Category category) {
+		categoryRepository.delete(category);
+	}
+
+	public List<Category> findAllByParentId(Category category) {
+		return categoryRepository.findAllByParentId(category.getId());
 	}
 }
