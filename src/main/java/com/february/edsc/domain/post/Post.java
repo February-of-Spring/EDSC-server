@@ -13,7 +13,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +104,7 @@ public class Post {
             .viewCount(viewCount)
             .createdAt(createdAt)
             .modifiedAt(modifiedAt)
-            .category(category.toCategoryResponseDto())
+            .category(category.toCategoryChildResponseDto())
 //            .images()
 //            .files()
             .build();
