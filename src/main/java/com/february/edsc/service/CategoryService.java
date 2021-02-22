@@ -2,6 +2,7 @@ package com.february.edsc.service;
 
 import com.february.edsc.domain.category.CategoryPackResponseDto;
 import com.february.edsc.domain.category.Category;
+import com.february.edsc.domain.category.CategoryRequestDto;
 import com.february.edsc.domain.category.CategoryResponseDto;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostListResponseDto;
@@ -24,6 +25,10 @@ public class CategoryService {
 		return categoryRepository.findByName(categoryName);
 	}
 
+	public Optional<Category> findById(Long parentId) {
+		return categoryRepository.findById(parentId);
+	}
+	
 	@Transactional
 	public List<CategoryPackResponseDto> getCategories() {
 		List<CategoryPackResponseDto> categoryPackResponseDtoList = new ArrayList<>();
@@ -70,5 +75,25 @@ public class CategoryService {
 			.totalNum(posts.size())
 			.postList(posts)
 			.build();
+	}
+
+	@Transactional
+	public String createCategoryChild(CategoryRequestDto categoryRequestDto, Category parentCategory) {
+		Category category = categoryRepository.save(Category.builder()
+			.name(categoryRequestDto.getName())
+			.level(categoryRequestDto.getLevel())
+			.parent(parentCategory)
+			.build());
+		return parentCategory.getName() + "/" + category.getName();
+	}
+
+	@Transactional
+	public String createCategoryParent(CategoryRequestDto categoryRequestDto) {
+		Category category = categoryRepository.save(Category.builder()
+			.name(categoryRequestDto.getName())
+			.level(categoryRequestDto.getLevel())
+			.build());
+		category.setParent(category);
+		return category.getName();
 	}
 }
