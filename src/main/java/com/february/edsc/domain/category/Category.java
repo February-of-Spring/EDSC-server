@@ -34,11 +34,22 @@ public class Category {
         this.parent = parent;
     }
 
+    public CategoryResponseDto toCategoryParentResponseDto(Long parentNum) {
+        return CategoryResponseDto.builder()
+            .id(id)
+            .name(name)
+            .level(level)
+            .postNum(parentNum)
+            .parentCategoryId(parent.getId())
+            .build();
+    }
+
     public CategoryResponseDto toCategoryResponseDto() {
         return CategoryResponseDto.builder()
             .id(id)
             .name(name)
             .level(level)
+            .postNum((long) posts.size())
             .parentCategoryId(parent.getId())
             .build();
     }
