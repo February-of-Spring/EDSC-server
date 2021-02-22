@@ -42,6 +42,6 @@ public class CategoryService {
 	@Transactional
 	public List<CategoryResponseDto> getChild(Category category) {
 		return categoryRepository.findAllByParentIdAndLevel(category.getId(), 2)
-			.stream().map(Category::toCategoryResponseDto).collect(Collectors.toList());
+			.stream().map(Category::toCategoryChildResponseDto).collect(Collectors.toList());
 	}
 }

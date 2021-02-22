@@ -44,7 +44,7 @@ public class Category {
             .build();
     }
 
-    public CategoryResponseDto toCategoryResponseDto() {
+    public CategoryResponseDto toCategoryChildResponseDto() {
         return CategoryResponseDto.builder()
             .id(id)
             .name(name)
