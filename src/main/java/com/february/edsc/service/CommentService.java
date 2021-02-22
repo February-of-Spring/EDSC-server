@@ -36,6 +36,11 @@ public class CommentService {
 			.getId().toString();
 	}
 
+	@Transactional
+	public void updateComment(Comment comment, CommentRequestDto commentRequestDto) {
+		comment.updateComment(commentRequestDto);
+	}
+
 	public Optional<Comment> findById(Long id) {
 		return commentRepository.findById(id);
 	}
