@@ -1,5 +1,6 @@
 package com.february.edsc.domain.post;
 
+import com.february.edsc.domain.category.CategoryResponseDto;
 import com.february.edsc.domain.user.UserResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class PostResponseDto {
+	private final Long id;
 	private final UserResponseDto user;
 	private final String title;
 	private final String content;
@@ -19,7 +21,7 @@ public class PostResponseDto {
 	private final int viewCount;
 	private final Timestamp createdAt;
 	private final Timestamp modifiedAt;
-	private final String category;
+	private final CategoryResponseDto category;
 	private final List<String> images;
 	private final List<String> files;
 }

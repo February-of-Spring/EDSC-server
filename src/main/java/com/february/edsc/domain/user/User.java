@@ -3,6 +3,7 @@ package com.february.edsc.domain.user;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.post.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -50,4 +52,11 @@ public class User {
             .profileImage(profileImage)
             .build();
     }
+
+	public void updateUser(UserUpdateDto userUpdateDto) {
+        this.name = userUpdateDto.getName();
+        this.nickname = userUpdateDto.getNickname();
+        this.password = userUpdateDto.getPassword();
+        this.phone = userUpdateDto.getPhone();
+	}
 }

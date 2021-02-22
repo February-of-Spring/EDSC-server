@@ -13,7 +13,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +96,7 @@ public class Post {
 
     public PostResponseDto toPostResponseDto() {
         return PostResponseDto.builder()
+            .id(id)
             .user(user.toUserResponseDto())
             .title(title)
             .content(content)
@@ -104,7 +104,7 @@ public class Post {
             .viewCount(viewCount)
             .createdAt(createdAt)
             .modifiedAt(modifiedAt)
-            .category(category.getName())
+            .category(category.toCategoryChildResponseDto())
 //            .images()
 //            .files()
             .build();
@@ -121,12 +121,12 @@ public class Post {
         this.category = category;
     }
 
-    public int upLikeCount() {
-        return ++likeCount;
+    public void upLikeCount() {
+        likeCount++;
     }
 
-    public int downLikeCount() {
-        return --likeCount;
+    public void downLikeCount() {
+        likeCount--;
     }
 
     public LikeResponseDto toLikeResponseDto(Post post) {

@@ -4,7 +4,6 @@ import com.february.edsc.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,13 +18,47 @@ public class Category {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String description;
+    private int level;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
     @OneToMany(mappedBy = "category")
-    private List<Post> posts = new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
 
     @Builder
-    public Category(String name, String description) {
+    public Category(String name, int level, Category parent) {
         this.name = name;
-        this.description = description;
+        this.level = level;
+        this.parent = parent;
+    }
+
+    public CategoryResponseDto toCategoryParentResponseDto(Long parentNum) {
+        return CategoryResponseDto.builder()
+            .id(id)
+            .name(name)
+            .level(level)
+            .postNum(parentNum)
+            .parentCategoryId(parent.getId())
+            .build();
+    }
+
+    public CategoryResponseDto toCategoryChildResponseDto() {
+        return CategoryResponseDto.builder()
+            .id(id)
+            .name(name)
+            .level(level)
+            .postNum((long) posts.size())
+            .parentCategoryId(parent.getId())
+            .build();
+    }
+
+    public void setParent(Category category) {
+        this.parent = category;
+    }
+
+    public void updateCategory(CategoryRequestDto categoryRequestDto) {
+        this.name = categoryRequestDto.getName();
     }
 }

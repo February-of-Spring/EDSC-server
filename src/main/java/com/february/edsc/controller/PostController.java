@@ -2,9 +2,11 @@ package com.february.edsc.controller;
 
 import com.february.edsc.common.Error;
 import com.february.edsc.common.ErrorMessage;
+import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostRequestDto;
 import com.february.edsc.domain.user.User;
+import com.february.edsc.service.CategoryService;
 import com.february.edsc.service.PostService;
 import com.february.edsc.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class PostController {
 	private final UserService userService;
 	private final PostService postService;
+	private final CategoryService categoryService;
 
 	@PostMapping("/posts")
 	public ResponseEntity<Object> createPost(@RequestBody PostRequestDto postRequestDto) {
@@ -32,9 +35,13 @@ public class PostController {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
 		}
-		String postId = postService.createPost(postRequestDto, user.get());
-		URI location = URI.create("/posts/" + postId);
-		return ResponseEntity.created(location).build();
+		Optional<Category> category
+			= categoryService.findByLevelAndName(2, postRequestDto.getCategoryName());
+		if (category.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
+		String postId = postService.createPost(postRequestDto, user.get(), category.get());
+		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
 	}
 
 	@GetMapping("/posts/{id}")
@@ -56,7 +63,12 @@ public class PostController {
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
-		postService.updatePost(post.get(), postRequestDto);
+		Optional<Category> category
+			= categoryService.findByLevelAndName(2, postRequestDto.getCategoryName());
+		if (category.isEmpty())
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
+		postService.updatePost(post.get(), postRequestDto, category.get());
 		return ResponseEntity.ok().build();
 	}
 

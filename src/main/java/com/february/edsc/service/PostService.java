@@ -7,9 +7,7 @@ import com.february.edsc.domain.post.PostResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
-import com.february.edsc.repository.CategoryRepository;
 import com.february.edsc.repository.LikeRepository;
-import com.february.edsc.repository.PostJpaRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +20,11 @@ import java.util.Optional;
 public class PostService {
 
 	private final PostRepository postRepository;
-	private final PostJpaRepository postJpaRepository;
 	private final LikeRepository likeRepository;
-	private final CategoryRepository categoryRepository;
 
 	@Transactional
-	public String createPost(PostRequestDto postRequestDto, User user) {
-		Category category = getCategory(postRequestDto.getCategoryName());
-		Long postId = postRepository.save(
+	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
+		Post post = postRepository.save(
 			Post.builder()
 				.user(user)
 				.title(postRequestDto.getTitle())
@@ -39,19 +34,11 @@ public class PostService {
 //				.files(postRequestDto.getFiles())
 				.build()
 		);
-		return postId.toString();
-	}
-
-	@Transactional
-	public Category getCategory(String categoryName) {
-		Optional<Category> category = categoryRepository.findByName(categoryName);
-		if (category.isEmpty())
-			return categoryRepository.save(Category.builder().name(categoryName).build());
-		return category.get();
+		return post.getId().toString();
 	}
 
 	public Optional<Post> findById(Long id) {
-		return postJpaRepository.findById(id);
+		return postRepository.findById(id);
 	}
 
 	@Transactional
@@ -61,13 +48,12 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Post post, PostRequestDto postRequestDto) {
-		Category category = getCategory(postRequestDto.getCategoryName());
+	public void updatePost(Post post, PostRequestDto postRequestDto, Category category) {
 		post.updatePost(postRequestDto, category);
 	}
 
 	public void deletePost(Post post) {
-		postJpaRepository.delete(post);
+		postRepository.delete(post);
 	}
 
 	@Transactional

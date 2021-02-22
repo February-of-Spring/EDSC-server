@@ -1,8 +1,9 @@
 CREATE TABLE category
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
-    description VARCHAR(255),
     name        VARCHAR(255),
+    level       INTEGER,
+    parent_id   BIGINT,
     PRIMARY KEY (id)
 );
 
