@@ -11,5 +11,6 @@ public class CategoryResponseDto {
 	private final Long id;
 	private final String name;
 	private final int level;
+	private final Long postNum;
 	private final Long parentCategoryId;
 }
