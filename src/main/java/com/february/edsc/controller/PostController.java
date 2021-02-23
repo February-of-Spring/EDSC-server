@@ -68,6 +68,9 @@ public class PostController {
 		if (category.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
+		if (!postRequestDto.getEmail().equals(post.get().getUser().getEmail()))
+			return ResponseEntity.status(HttpStatus.FORBIDDEN)
+				.body(new Error(HttpStatus.FORBIDDEN, ErrorMessage.UNAUTHORIZED_TO_UPDATE));
 		postService.updatePost(post.get(), postRequestDto, category.get());
 		return ResponseEntity.ok().build();
 	}

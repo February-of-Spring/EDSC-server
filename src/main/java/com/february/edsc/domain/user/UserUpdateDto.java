@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class UserUpdateDto {
+	private final String email;
 	private final String name;
 	private final String nickname;
 	private final String phone;
@@ -15,7 +16,8 @@ public class UserUpdateDto {
 	private final String profileImage;
 
 	public boolean isRequiredFieldNull() {
-		return (name == null) || (name.isEmpty()) ||
+		return (email == null) || (email.isEmpty()) ||
+			(name == null) || (name.isEmpty()) ||
 			(nickname == null) || (nickname.isEmpty()) ||
 			(phone == null) || (phone.isEmpty()) ||
 			(password == null) || (password.isEmpty());

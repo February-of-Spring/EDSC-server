@@ -11,11 +11,11 @@ CREATE TABLE comment
 (
     id          BIGINT NOT NULL AUTO_INCREMENT,
     content     VARCHAR(255),
-    is_public   BIT,
-    like_count  INTEGER DEFAULT 0,
+    is_public   BIT DEFAULT true,
     created_at  TIMESTAMP,
     modified_at TIMESTAMP,
     parent_id   BIGINT,
+    user_id     BIGINT,
     post_id     BIGINT,
     PRIMARY KEY (id)
 );

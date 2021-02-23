@@ -4,6 +4,7 @@ import com.february.edsc.common.Error;
 import com.february.edsc.common.ErrorMessage;
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.category.CategoryRequestDto;
+import com.february.edsc.domain.category.CategoryResponseDto;
 import com.february.edsc.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,14 @@ public class CategoryController {
 	@GetMapping("/category")
 	public ResponseEntity<Object> getCategories() {
 		return ResponseEntity.ok().body(categoryService.getCategories());
+	}
+
+	@GetMapping("/category/posts/level2")
+	public ResponseEntity<Object> getLevel2CategoryNames() {
+		List<String> categories = categoryService.findAllByLevel(2)
+			.stream().map(Category::toCategoryChildResponseDto)
+			.map(CategoryResponseDto::getName).collect(Collectors.toList());
+		return ResponseEntity.ok().body(categories);
 	}
 
 	@GetMapping(value = {"/category/{level1}", "/category/{level1}/{level2}"})
