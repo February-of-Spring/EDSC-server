@@ -19,6 +19,8 @@ public class CommentRequestDto {
 	}
 
 	public boolean isUpdatingRequiredFieldNull() {
-		return (content == null) || (content.isEmpty());
+		return (email == null) || (email.isEmpty()) ||
+			(content == null) || (content.isEmpty()) ||
+			(isPublic == null) || (parentId == null);
 	}
 }
