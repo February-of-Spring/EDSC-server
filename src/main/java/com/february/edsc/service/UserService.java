@@ -99,8 +99,13 @@ public class UserService {
     @Transactional
     public String updateUserImage(File convertedFile, User user) {
         String result = s3Service.upload(convertedFile, PROFILE_IMAGE_PATH, user.getId().toString());
-        System.out.println("result: " + result);
         user.updateImage(result);
         return result;
+    }
+
+    @Transactional
+    public void deleteUserImage(User user) {
+        s3Service.delete(PROFILE_IMAGE_PATH, user.getId().toString());
+        user.updateImage("");
     }
 }
