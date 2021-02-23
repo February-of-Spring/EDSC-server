@@ -33,7 +33,7 @@ public class CategoryService {
 		}
 		return CategoryListResponseDto.builder()
 			.totalNum(categoryPackResponseDtoList.size())
-			.parentList(categoryPackResponseDtoList)
+			.parentPackList(categoryPackResponseDtoList)
 			.build();
 	}
 

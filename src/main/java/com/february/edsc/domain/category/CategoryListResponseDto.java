@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryListResponseDto {
 	private final int totalNum;
-	private final List<CategoryPackResponseDto> parentList;
+	private final List<CategoryPackResponseDto> parentPackList;
 }
