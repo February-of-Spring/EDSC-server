@@ -14,7 +14,7 @@ public class ErrorMessage {
 	public static final String BAD_REQUEST = "잘못된 경로로 접근하셨습니다.";
 	public static final String UNAUTHORIZED_TO_UPDATE = "수정할 수 있는 권한이 없습니다.";
 	public static final String UNAUTHORIZED_TO_DELETE = "삭제할 수 있는 권한이 없습니다.";
-	public static final String FAIL_FILE_DELETE_ERROR = "파일 삭제에 실패했습니다.";
+	public static final String FAIL_FILE_DELETE = "파일 삭제에 실패했습니다.";
 	public static final String FAIL_FILE_CONVERT = "파일 변환에 실패했습니다.";
 	public static final String INVALID_FILE_TYPE = "지원하지 않는 파일 형식입니다.";
 }
