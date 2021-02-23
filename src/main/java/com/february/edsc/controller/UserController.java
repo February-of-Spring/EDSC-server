@@ -99,4 +99,15 @@ public class UserController {
 		String result = userService.updateUserImage(convertedFile.get(), user.get());
 		return ResponseEntity.created(URI.create(result)).build();
 	}
+
+	@DeleteMapping("/users/{id}/image")
+	public ResponseEntity<Object> deleteUserImage(@PathVariable Long id) {
+		Optional<User> user = userService.findById(id);
+		if (user.isEmpty()) {
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		}
+		userService.deleteUserImage(user.get());
+		return ResponseEntity.noContent().build();
+	}
 }
