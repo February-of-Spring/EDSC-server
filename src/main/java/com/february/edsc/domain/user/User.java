@@ -23,8 +23,6 @@ public class User {
     private String password;
     private String name;
     private String nickname;
-
-    @Column(name = "profile_image")
     private String profileImage;
     private String phone;
 
@@ -59,4 +57,8 @@ public class User {
         this.password = userUpdateDto.getPassword();
         this.phone = userUpdateDto.getPhone();
 	}
+
+    public void updateImage(String result) {
+	    this.profileImage = result;
+    }
 }
