@@ -51,9 +51,7 @@ public class S3Service {
 
 	public boolean isValidExtension(File uploadFile) {
 		String fileName = uploadFile.getName().toLowerCase();
-		System.out.println("toLowerCase: " + fileName);
 		String extension = "." + fileName.substring(fileName.lastIndexOf(".") + 1);
-		System.out.println("extension: " + extension);
 		if (!IMAGE_EXTENSIONS.contains(extension)) {
 			deleteLocalFile(uploadFile);
 			return false;
@@ -62,23 +60,19 @@ public class S3Service {
 	}
 
 	public void delete(String dirName, String id) {
-		deleteFromS3(dirName + "/" + id);
-	}
-
-	private void deleteFromS3(String key) {
-		amazonS3Client.deleteObject(bucket, key);
+		amazonS3Client.deleteObject(bucket, dirName + "/" + id);
 	}
 
 	private String putS3(File uploadFile, String fileName) {
 		amazonS3Client.putObject(
-			new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
-				CannedAccessControlList.PublicRead));
+			new PutObjectRequest(bucket, fileName, uploadFile)
+				.withCannedAcl(CannedAccessControlList.PublicRead));
 		return amazonS3Client.getUrl(bucket, fileName).toString();
 	}
 
 	private void deleteLocalFile(File uploadFile) {
 		if (!uploadFile.delete()) {
-			log.debug(ErrorMessage.FAIL_FILE_DELETE_ERROR);
+			log.debug(ErrorMessage.FAIL_FILE_DELETE);
 		}
 	}
 }
