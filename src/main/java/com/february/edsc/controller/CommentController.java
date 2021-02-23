@@ -56,7 +56,7 @@ public class CommentController {
 		} else
 			commentId = commentService.createComment(commentRequestDto, user.get(), post.get());
 		return ResponseEntity.created(
-			URI.create("/posts/" + postId + "/comments" + commentId)).build();
+			URI.create("/posts/" + postId + "/comments/" + commentId)).build();
 	}
 
 	@PutMapping("/posts/{postId}/comments/{commentId}")
@@ -89,7 +89,7 @@ public class CommentController {
 		if (comment.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_COMMENT));
-		// ToDo: check UNAUTHORIZED, return ErrorMessage.UNAUTHORIZED_TO_DELETE
+		// ToDo: check FORBIDDEN, return ErrorMessage.UNAUTHORIZED_TO_DELETE
 		if (!comment.get().getPost().getId().equals(postId))
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.BAD_REQUEST));
