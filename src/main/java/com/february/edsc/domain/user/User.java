@@ -48,6 +48,7 @@ public class User {
             .nickname(nickname)
             .phone(phone)
             .profileImage(profileImage)
+			.postNum((long) posts.size())
             .build();
     }
 
