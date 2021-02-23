@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final String PROFILE_IMAGE_PATH = "profile-image";
+
+    private final S3Service s3Service;
     private final UserRepository userRepository;
     private final UserJpaRepository userJpaRepository;
     private final PostRepository postRepository;
@@ -90,5 +94,13 @@ public class UserService {
     @Transactional
     public void updateUser(User user, UserUpdateDto userUpdateDto) {
         user.updateUser(userUpdateDto);
+    }
+
+    @Transactional
+    public String updateUserImage(File convertedFile, User user) {
+        String result = s3Service.upload(convertedFile, PROFILE_IMAGE_PATH, user.getId().toString());
+        System.out.println("result: " + result);
+        user.updateImage(result);
+        return result;
     }
 }
