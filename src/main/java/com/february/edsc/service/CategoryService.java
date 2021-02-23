@@ -19,21 +19,22 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
 	@Transactional
-	public List<CategoryPackResponseDto> getCategories() {
+	public CategoryListResponseDto getCategories() {
 		List<CategoryPackResponseDto> categoryPackResponseDtoList = new ArrayList<>();
-		long id = 1;
 		for (Category parentCategory : categoryRepository.findAllByLevel(1)) {
-			List<CategoryResponseDto> child = getChild(parentCategory);
-			long parentNum = child.stream().mapToLong(CategoryResponseDto::getPostNum).sum();
+			List<CategoryResponseDto> childList = getChild(parentCategory);
+			long parentNum = childList.stream().mapToLong(CategoryResponseDto::getPostNum).sum();
 			categoryPackResponseDtoList.add(
 				CategoryPackResponseDto.builder()
-					.id(id++)
 					.parent(parentCategory.toCategoryParentResponseDto(parentNum))
-					.childNum((long) child.size())
-					.child(child)
+					.childNum((long) childList.size())
+					.childList(childList)
 					.build());
 		}
-		return categoryPackResponseDtoList;
+		return CategoryListResponseDto.builder()
+			.totalNum(categoryPackResponseDtoList.size())
+			.parentList(categoryPackResponseDtoList)
+			.build();
 	}
 
 	@Transactional
