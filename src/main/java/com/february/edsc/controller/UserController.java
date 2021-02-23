@@ -41,6 +41,9 @@ public class UserController {
 		if (user.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		if (!user.get().getEmail().equals(userUpdateDto.getEmail()))
+			return ResponseEntity.status(HttpStatus.FORBIDDEN)
+				.body(new Error(HttpStatus.FORBIDDEN, ErrorMessage.UNAUTHORIZED_TO_UPDATE));
 		userService.updateUser(user.get(), userUpdateDto);
 		return ResponseEntity.ok().build();
 	}
