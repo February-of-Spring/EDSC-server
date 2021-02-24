@@ -3,7 +3,9 @@ package com.february.edsc.domain.post;
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.comment.Comment;
 import com.february.edsc.domain.post.file.File;
+import com.february.edsc.domain.post.file.FileResponseDto;
 import com.february.edsc.domain.post.image.Image;
+import com.february.edsc.domain.post.image.ImageResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.LikeResponseDto;
 import lombok.Builder;
@@ -15,6 +17,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -94,8 +97,10 @@ public class Post {
         this.files = files;
     }
 
-    public PostResponseDto toPostResponseDto() {
-        return PostResponseDto.builder()
+    public PostDetailResponseDto toPostDetailResponseDto(
+//        List<Comment> commentList
+    ) {
+        return PostDetailResponseDto.builder()
             .id(id)
             .user(user.toUserResponseDto())
             .title(title)
@@ -105,8 +110,22 @@ public class Post {
             .createdAt(createdAt)
             .modifiedAt(modifiedAt)
             .category(category.toCategoryChildResponseDto())
-//            .images()
-//            .files()
+            .imageList(images.stream().map(Image::toImageResponseDto).collect(Collectors.toList()))
+            .fileList(files.stream().map(File::toFileResponseDto).collect(Collectors.toList()))
+            .commentNum(comments.size())
+//            .commentList()
+            .build();
+    }
+
+    public PostResponseDto toPostResponseDto() {
+        return PostResponseDto.builder()
+            .id(id)
+            .category(category.toCategoryChildResponseDto())
+            .user(user.toUserResponseDto())
+            .title(title)
+            .content(content)
+            .likeCount(likeCount)
+            .viewCount(viewCount)
             .build();
     }
 
