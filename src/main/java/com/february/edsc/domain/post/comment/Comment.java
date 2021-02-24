@@ -65,4 +65,15 @@ public class Comment {
         content = commentRequestDto.getContent();
         isPublic = commentRequestDto.getIsPublic();
     }
+
+    public CommentResponseDto toCommentResponseDto() {
+        return CommentResponseDto.builder()
+            .id(id)
+            .content(content)
+            .createdAt(createdAt)
+            .modifiedAt(modifiedAt)
+            .isPublic(isPublic)
+            .user(user.toUserResponseDto())
+            .build();
+    }
 }
