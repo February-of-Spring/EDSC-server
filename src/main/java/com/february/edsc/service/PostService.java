@@ -2,10 +2,17 @@ package com.february.edsc.service;
 
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.*;
+import com.february.edsc.domain.post.comment.Comment;
+import com.february.edsc.domain.post.comment.CommentPackResponseDto;
+import com.february.edsc.domain.post.file.File;
+import com.february.edsc.domain.post.file.FileResponseDto;
+import com.february.edsc.domain.post.image.Image;
+import com.february.edsc.domain.post.image.ImageResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
 import com.february.edsc.repository.CategoryRepository;
+import com.february.edsc.repository.CommentRepository;
 import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +30,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final LikeRepository likeRepository;
-	private final CategoryRepository categoryRepository;
+	private final CommentRepository commentRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
@@ -46,8 +54,32 @@ public class PostService {
 	@Transactional
 	public PostDetailResponseDto toDetailPostResponseDto(Post post) {
 		post.upViewCount();
-		return post.toPostDetailResponseDto();
+		List<CommentPackResponseDto> commentList = new ArrayList<>();
+		List<Comment> comments = commentRepository.findAllByPostId(post.getId());
+		List<Comment> parentComments = comments.stream()
+			.filter((comment -> comment.getParent().getId().equals(comment.getId())))
+			.collect(Collectors.toList());
+		for (Comment parentComment : parentComments) {
+			comments.remove(parentComment);
+			List<Comment> childComments = comments.stream()
+				.filter((comment -> comment.getParent().getId().equals(parentComment.getId())))
+				.collect(Collectors.toList());
+			commentList.add(
+				CommentPackResponseDto.builder()
+					.comment(parentComment.toCommentResponseDto())
+					.childNum((long) childComments.size())
+					.childList(childComments.stream()
+						.map(Comment::toCommentResponseDto).collect(Collectors.toList()))
+					.build()
+			);
+		}
+		List<ImageResponseDto> imageList =
+			post.getImages().stream().map(Image::toImageResponseDto).collect(Collectors.toList());
+		List<FileResponseDto> fileList =
+			post.getFiles().stream().map(File::toFileResponseDto).collect(Collectors.toList());
+		return post.toPostDetailResponseDto(imageList, fileList, commentList);
 	}
+
 
 	@Transactional
 	public void updatePost(Post post, PostRequestDto postRequestDto, Category category) {
