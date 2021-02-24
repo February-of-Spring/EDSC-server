@@ -2,6 +2,7 @@ package com.february.edsc.domain.post;
 
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.comment.Comment;
+import com.february.edsc.domain.post.comment.CommentPackResponseDto;
 import com.february.edsc.domain.post.file.File;
 import com.february.edsc.domain.post.file.FileResponseDto;
 import com.february.edsc.domain.post.image.Image;
@@ -98,8 +99,8 @@ public class Post {
     }
 
     public PostDetailResponseDto toPostDetailResponseDto(
-//        List<Comment> commentList
-    ) {
+        List<ImageResponseDto> imageList, List<FileResponseDto> fileList,
+        List<CommentPackResponseDto> commentList) {
         return PostDetailResponseDto.builder()
             .id(id)
             .user(user.toUserResponseDto())
@@ -110,10 +111,10 @@ public class Post {
             .createdAt(createdAt)
             .modifiedAt(modifiedAt)
             .category(category.toCategoryChildResponseDto())
-            .imageList(images.stream().map(Image::toImageResponseDto).collect(Collectors.toList()))
-            .fileList(files.stream().map(File::toFileResponseDto).collect(Collectors.toList()))
+            .imageList(imageList)
+            .fileList(fileList)
             .commentNum(comments.size())
-//            .commentList()
+            .commentList(commentList)
             .build();
     }
 
