@@ -1,6 +1,5 @@
 package com.february.edsc.domain.category;
 
-import com.february.edsc.domain.post.PostResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

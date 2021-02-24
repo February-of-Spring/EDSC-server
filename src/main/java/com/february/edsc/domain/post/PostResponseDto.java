@@ -6,22 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 @Getter
 @Builder
 @AllArgsConstructor
 public class PostResponseDto {
 	private final Long id;
+	private final CategoryResponseDto category;
 	private final UserResponseDto user;
 	private final String title;
 	private final String content;
 	private final int likeCount;
 	private final int viewCount;
-	private final Timestamp createdAt;
-	private final Timestamp modifiedAt;
-	private final CategoryResponseDto category;
-	private final List<String> images;
-	private final List<String> files;
 }
