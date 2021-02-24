@@ -11,10 +11,7 @@ import com.february.edsc.domain.post.image.ImageResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
-import com.february.edsc.repository.CategoryRepository;
-import com.february.edsc.repository.CommentRepository;
-import com.february.edsc.repository.LikeRepository;
-import com.february.edsc.repository.PostRepository;
+import com.february.edsc.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +25,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PostService {
 
+	private final String IMAGE_PATH = "post-image";
+
+	private final S3Service s3Service;
 	private final PostRepository postRepository;
 	private final LikeRepository likeRepository;
+	private final ImageRepository imageRepository;
 	private final CommentRepository commentRepository;
 
 	@Transactional
@@ -114,6 +115,7 @@ public class PostService {
 		return post.toLikeResponseDto(post);
 	}
 
+	@Transactional
 	public PostListResponseDto getMainPost() {
 		List<PostResponseDto> postList = new ArrayList<>();
 		for (long id = 4L; id <= 6L; id++) {
@@ -124,5 +126,14 @@ public class PostService {
 			.totalNum(postList.size())
 			.postList(postList)
 			.build();
+	}
+
+	@Transactional
+	public String createPostImage(java.io.File convertedFile, Post post) {
+		Image image = imageRepository.save(Image.builder().post(post).build());
+		String result = s3Service
+			.upload(convertedFile, IMAGE_PATH, String.valueOf(image.getId()));
+		image.updateImage(result);
+		return result;
 	}
 }
