@@ -20,4 +20,10 @@ public class File {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public FileResponseDto toFileResponseDto() {
+        return FileResponseDto.builder()
+            .id(id)
+            .path(path)
+            .build();
+    }
 }

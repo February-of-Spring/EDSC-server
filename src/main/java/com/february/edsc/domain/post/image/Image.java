@@ -1,6 +1,7 @@
 package com.february.edsc.domain.post.image;
 
 import com.february.edsc.domain.post.Post;
+import com.february.edsc.domain.post.file.FileResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,4 +21,10 @@ public class Image {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public ImageResponseDto toImageResponseDto() {
+        return ImageResponseDto.builder()
+            .id(id)
+            .path(path)
+            .build();
+    }
 }
