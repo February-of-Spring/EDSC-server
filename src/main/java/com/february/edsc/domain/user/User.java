@@ -4,14 +4,13 @@ import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class User {
 

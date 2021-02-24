@@ -11,8 +11,7 @@ import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.LikeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.NoArgsConstructor;;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

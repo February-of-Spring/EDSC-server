@@ -2,12 +2,13 @@ package com.february.edsc.domain.post.file;
 
 import com.february.edsc.domain.post.Post;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
 public class File {
 
     @Id

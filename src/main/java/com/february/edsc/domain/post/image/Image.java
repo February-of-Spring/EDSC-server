@@ -1,11 +1,9 @@
 package com.february.edsc.domain.post.image;
 
 import com.february.edsc.domain.post.Post;
-import com.february.edsc.domain.post.file.FileResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
