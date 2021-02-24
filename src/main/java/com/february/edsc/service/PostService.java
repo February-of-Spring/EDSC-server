@@ -136,4 +136,12 @@ public class PostService {
 		image.updateImage(result);
 		return result;
 	}
+
+	@Transactional
+	public String updatePostImage(java.io.File convertedFile, Image image) {
+		String result = s3Service
+			.upload(convertedFile, IMAGE_PATH, image.getId().toString());
+		image.updateImage(result);
+		return result;
+	}
 }
