@@ -6,6 +6,8 @@ public class ErrorMessage {
 	public static final String REQUIRED_FIELD_NULL = "필수 항목을 입력해주세요.";
 	public static final String NO_SUCH_CATEGORY = "존재하지 않는 카테고리입니다.";
 	public static final String DUPLICATE_CATEGORY = "이미 존재하는 카테고리입니다.";
+	public static final String DENY_TO_DELETE_CATEGORY1 = "삭제할 수 없는 카테고리입니다.";
+	public static final String DENY_TO_DELETE_CATEGORY2 = "삭제할 수 없는 그룹입니다.";
 	public static final String NO_SUCH_PARENT_CATEGORY = "카테고리의 상위 항목이 존재하지 않습니다.";
 	public static final String CATEGORY_HAS_POSTS = "게시물이 존재하는 카테고리는 삭제할 수 없습니다.";
 	public static final String CATEGORY_HAS_CHILD = "하위 카테고리가 존재하는 그룹은 삭제할 수 없습니다.";
