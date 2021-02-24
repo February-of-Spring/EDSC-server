@@ -5,11 +5,9 @@ import com.february.edsc.common.ErrorMessage;
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.PostRequestDto;
+import com.february.edsc.domain.post.image.Image;
 import com.february.edsc.domain.user.User;
-import com.february.edsc.service.CategoryService;
-import com.february.edsc.service.PostService;
-import com.february.edsc.service.S3Service;
-import com.february.edsc.service.UserService;
+import com.february.edsc.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +27,7 @@ public class PostController {
 	private final S3Service s3Service;
 	private final UserService userService;
 	private final PostService postService;
+	private final ImageService imageService;
 	private final CategoryService categoryService;
 
 	@PostMapping("/posts")
@@ -150,6 +149,32 @@ public class PostController {
 				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_FILE_TYPE));
 		}
 		String result = postService.createPostImage(convertedFile.get(), post.get());
+		return ResponseEntity.created(URI.create(result)).build();
+	}
+
+	@PatchMapping("/posts/image/{id}")
+	public ResponseEntity<Object> updateUserImage(
+		@RequestParam("image") MultipartFile multipartFile, @PathVariable Long id) throws IOException {
+		Optional<Image> image = imageService.findById(id);
+		if (image.isEmpty()) {
+			return ResponseEntity.badRequest().body(
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+		}
+		if (multipartFile.isEmpty()) {
+			return ResponseEntity.badRequest().body(
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
+		}
+		Optional<File> convertedFile = s3Service.convert(multipartFile);
+		if (convertedFile.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(new Error(HttpStatus.INTERNAL_SERVER_ERROR,
+					ErrorMessage.FAIL_FILE_CONVERT));
+		}
+		if (!s3Service.isValidExtension(convertedFile.get())) {
+			return ResponseEntity.badRequest().body(
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_FILE_TYPE));
+		}
+		String result = postService.updatePostImage(convertedFile.get(), image.get());
 		return ResponseEntity.created(URI.create(result)).build();
 	}
 }
