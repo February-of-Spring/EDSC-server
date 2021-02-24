@@ -44,13 +44,18 @@ public class PostController {
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
 	}
 
+	@GetMapping("/posts/main")
+	public ResponseEntity<Object> getMainPost() {
+		return ResponseEntity.ok().body(postService.getMainPost());
+	}
+
 	@GetMapping("/posts/{id}")
 	public ResponseEntity<Object> getPost(@PathVariable Long id) {
 		Optional<Post> post = postService.findById(id);
 		if (post.isEmpty())
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
-		return ResponseEntity.ok().body(postService.toPostResponseDto(post.get()));
+		return ResponseEntity.ok().body(postService.toDetailPostResponseDto(post.get()));
 	}
 
 	@PutMapping("/posts/{id}")
