@@ -1,18 +1,19 @@
 package com.february.edsc.service;
 
 import com.february.edsc.domain.category.Category;
-import com.february.edsc.domain.post.Post;
-import com.february.edsc.domain.post.PostRequestDto;
-import com.february.edsc.domain.post.PostResponseDto;
+import com.february.edsc.domain.post.*;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.Like;
 import com.february.edsc.domain.user.like.LikeResponseDto;
+import com.february.edsc.repository.CategoryRepository;
 import com.february.edsc.repository.LikeRepository;
 import com.february.edsc.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final LikeRepository likeRepository;
+	private final CategoryRepository categoryRepository;
 
 	@Transactional
 	public String createPost(PostRequestDto postRequestDto, User user, Category category) {
@@ -42,9 +44,9 @@ public class PostService {
 	}
 
 	@Transactional
-	public PostResponseDto toPostResponseDto(Post post) {
+	public PostDetailResponseDto toDetailPostResponseDto(Post post) {
 		post.upViewCount();
-		return post.toPostResponseDto();
+		return post.toPostDetailResponseDto();
 	}
 
 	@Transactional
@@ -78,5 +80,17 @@ public class PostService {
 		likeRepository.delete(like.get());
 		post.downLikeCount();
 		return post.toLikeResponseDto(post);
+	}
+
+	public PostListResponseDto getMainPost() {
+		List<PostResponseDto> postList = new ArrayList<>();
+		for (long id = 4L; id <= 6L; id++) {
+			Optional<Post> post = postRepository.findTopByCategoryIdOrderByCreatedAtDesc(id);
+			post.ifPresent(value -> postList.add(value.toPostResponseDto()));
+		}
+		return PostListResponseDto.builder()
+			.totalNum(postList.size())
+			.postList(postList)
+			.build();
 	}
 }
