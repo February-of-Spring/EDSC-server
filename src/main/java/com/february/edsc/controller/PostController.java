@@ -8,19 +8,25 @@ import com.february.edsc.domain.post.PostRequestDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.service.CategoryService;
 import com.february.edsc.service.PostService;
+import com.february.edsc.service.S3Service;
 import com.february.edsc.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
 public class PostController {
+
+	private final S3Service s3Service;
 	private final UserService userService;
 	private final PostService postService;
 	private final CategoryService categoryService;
@@ -120,5 +126,30 @@ public class PostController {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
 		return ResponseEntity.ok().body(postService.notLikePost(post.get(), user.get()));
+	}
+
+	@PostMapping("/posts/{id}/image")
+	public ResponseEntity<Object> createPostImage(
+		@RequestParam("image") MultipartFile multipartFile, @PathVariable Long id) throws IOException {
+		Optional<Post> post = postService.findById(id);
+		if (post.isEmpty()) {
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_POST));
+		}
+		if (multipartFile.isEmpty()) {
+			return ResponseEntity.badRequest()
+				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FILE_NULL));
+		}
+		Optional<java.io.File> convertedFile = s3Service.convert(multipartFile);
+		if (convertedFile.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body(new Error(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.FAIL_FILE_CONVERT));
+		}
+		if (!s3Service.isValidExtension(convertedFile.get())) {
+			return ResponseEntity.badRequest().body(
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_FILE_TYPE));
+		}
+		String result = postService.createPostImage(convertedFile.get(), post.get());
+		return ResponseEntity.created(URI.create(result)).build();
 	}
 }
