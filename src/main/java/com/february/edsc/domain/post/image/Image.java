@@ -2,13 +2,16 @@ package com.february.edsc.domain.post.image;
 
 import com.february.edsc.domain.post.Post;
 import com.february.edsc.domain.post.file.FileResponseDto;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
 public class Image {
 
     @Id
@@ -26,5 +29,14 @@ public class Image {
             .id(id)
             .path(path)
             .build();
+    }
+
+    @Builder
+    public Image(Post post) {
+        this.post = post;
+    }
+
+    public void updateImage(String result) {
+        this.path = result;
     }
 }
