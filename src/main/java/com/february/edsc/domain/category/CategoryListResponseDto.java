@@ -1,6 +1,5 @@
 package com.february.edsc.domain.category;
 
-import com.february.edsc.domain.post.PostResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryListResponseDto {
 	private final int totalNum;
-	private final List<CategoryPackResponseDto> parentList;
+	private final List<CategoryPackResponseDto> parentPackList;
 }

@@ -5,7 +5,6 @@ import com.february.edsc.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -64,5 +63,16 @@ public class Comment {
     public void updateComment(CommentRequestDto commentRequestDto) {
         content = commentRequestDto.getContent();
         isPublic = commentRequestDto.getIsPublic();
+    }
+
+    public CommentResponseDto toCommentResponseDto() {
+        return CommentResponseDto.builder()
+            .id(id)
+            .content(content)
+            .createdAt(createdAt)
+            .modifiedAt(modifiedAt)
+            .isPublic(isPublic)
+            .user(user.toUserResponseDto())
+            .build();
     }
 }

@@ -20,6 +20,14 @@ CREATE TABLE comment
     PRIMARY KEY (id)
 );
 
+CREATE TABLE image
+(
+    id      BIGINT NOT NULL AUTO_INCREMENT,
+    path    VARCHAR(255),
+    post_id BIGINT,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE file
 (
     id      BIGINT NOT NULL AUTO_INCREMENT,

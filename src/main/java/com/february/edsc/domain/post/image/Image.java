@@ -1,13 +1,15 @@
 package com.february.edsc.domain.post.image;
 
 import com.february.edsc.domain.post.Post;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
 public class Image {
 
     @Id
@@ -20,4 +22,19 @@ public class Image {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public ImageResponseDto toImageResponseDto() {
+        return ImageResponseDto.builder()
+            .id(id)
+            .path(path)
+            .build();
+    }
+
+    @Builder
+    public Image(Post post) {
+        this.post = post;
+    }
+
+    public void updateImage(String result) {
+        this.path = result;
+    }
 }

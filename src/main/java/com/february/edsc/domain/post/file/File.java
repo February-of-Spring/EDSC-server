@@ -2,12 +2,13 @@ package com.february.edsc.domain.post.file;
 
 import com.february.edsc.domain.post.Post;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
 public class File {
 
     @Id
@@ -20,4 +21,10 @@ public class File {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public FileResponseDto toFileResponseDto() {
+        return FileResponseDto.builder()
+            .id(id)
+            .path(path)
+            .build();
+    }
 }

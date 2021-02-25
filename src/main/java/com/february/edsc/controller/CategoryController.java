@@ -129,6 +129,9 @@ public class CategoryController {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
 		if (level2.isEmpty()) {
+			if ((1 <= category1.get().getId()) && (category1.get().getId() <= 3))
+				return ResponseEntity.badRequest()
+					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.DENY_TO_DELETE_CATEGORY1));
 			List<Category> childCategories = categoryService.findAllByParentId(category1.get());
 			if (childCategories.size() != 1)
 				return ResponseEntity.badRequest()
@@ -139,6 +142,9 @@ public class CategoryController {
 			if (category2.isEmpty())
 				return ResponseEntity.badRequest()
 					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_CATEGORY));
+			if ((4<= category2.get().getId()) && (category2.get().getId() <= 6))
+				return ResponseEntity.badRequest()
+					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.DENY_TO_DELETE_CATEGORY2));
 			if (category2.get().getPosts().size() != 0)
 				return ResponseEntity.badRequest()
 					.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.CATEGORY_HAS_POSTS));

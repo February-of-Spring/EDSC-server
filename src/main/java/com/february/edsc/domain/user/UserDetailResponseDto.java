@@ -13,4 +13,5 @@ public class UserDetailResponseDto {
 	private final String nickname;
 	private final String phone;
 	private final String profileImage;
+	private final Long postNum;
 }

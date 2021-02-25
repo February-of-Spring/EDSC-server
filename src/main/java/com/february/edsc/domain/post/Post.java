@@ -2,14 +2,16 @@ package com.february.edsc.domain.post;
 
 import com.february.edsc.domain.category.Category;
 import com.february.edsc.domain.post.comment.Comment;
+import com.february.edsc.domain.post.comment.CommentPackResponseDto;
 import com.february.edsc.domain.post.file.File;
+import com.february.edsc.domain.post.file.FileResponseDto;
 import com.february.edsc.domain.post.image.Image;
+import com.february.edsc.domain.post.image.ImageResponseDto;
 import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.LikeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.NoArgsConstructor;;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,7 +20,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Post {
 
@@ -55,7 +56,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
 
-    //==연관관계 편의 메서드==//
     public void setUser(User user) {
         this.user = user;
         user.getPosts().add(this);
@@ -65,21 +65,6 @@ public class Post {
         this.category = category;
         category.getPosts().add(this);
     }
-
-//    public void addComment(Comment comment) {
-//        comments.add(comment);
-//        comment.setPost(this);
-//    }
-//
-//    public void addImage(Image image) {
-//        images.add(image);
-//        image.setPost(this);
-//    }
-//
-//    public void addFile(File file) {
-//        files.add(file);
-//        file.setPost(this);
-//    }
 
     @Builder
     public Post(String title, String content, User user,
@@ -94,8 +79,10 @@ public class Post {
         this.files = files;
     }
 
-    public PostResponseDto toPostResponseDto() {
-        return PostResponseDto.builder()
+    public PostDetailResponseDto toPostDetailResponseDto(
+        List<ImageResponseDto> imageList, List<FileResponseDto> fileList,
+        List<CommentPackResponseDto> commentList) {
+        return PostDetailResponseDto.builder()
             .id(id)
             .user(user.toUserResponseDto())
             .title(title)
@@ -105,8 +92,22 @@ public class Post {
             .createdAt(createdAt)
             .modifiedAt(modifiedAt)
             .category(category.toCategoryChildResponseDto())
-//            .images()
-//            .files()
+            .imageList(imageList)
+            .fileList(fileList)
+            .commentNum(comments.size())
+            .commentList(commentList)
+            .build();
+    }
+
+    public PostResponseDto toPostResponseDto() {
+        return PostResponseDto.builder()
+            .id(id)
+            .category(category.toCategoryChildResponseDto())
+            .user(user.toUserResponseDto())
+            .title(title)
+            .content(content)
+            .likeCount(likeCount)
+            .viewCount(viewCount)
             .build();
     }
 
