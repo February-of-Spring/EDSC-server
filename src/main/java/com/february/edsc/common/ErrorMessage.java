@@ -20,4 +20,5 @@ public class ErrorMessage {
 	public static final String FAIL_FILE_CONVERT = "파일 변환에 실패했습니다.";
 	public static final String INVALID_FILE_TYPE = "지원하지 않는 파일 형식입니다.";
 	public static final String REQUIRED_FILE_NULL = "파일이 없습니다.";
+	public static final String NO_SUCH_IMAGE = "존재하지 않는 이미지입니다.";
 }
