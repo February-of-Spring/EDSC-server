@@ -154,15 +154,16 @@ public class PostController {
 
 	@PatchMapping("/posts/image/{id}")
 	public ResponseEntity<Object> updateUserImage(
-		@RequestParam("image") MultipartFile multipartFile, @PathVariable Long id) throws IOException {
+		@RequestParam("image") MultipartFile multipartFile, @PathVariable Long id)
+		throws IOException {
 		Optional<Image> image = imageService.findById(id);
 		if (image.isEmpty()) {
 			return ResponseEntity.badRequest().body(
-				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_IMAGE));
 		}
 		if (multipartFile.isEmpty()) {
 			return ResponseEntity.badRequest().body(
-				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FIELD_NULL));
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.REQUIRED_FILE_NULL));
 		}
 		Optional<File> convertedFile = s3Service.convert(multipartFile);
 		if (convertedFile.isEmpty()) {
@@ -176,5 +177,16 @@ public class PostController {
 		}
 		String result = postService.updatePostImage(convertedFile.get(), image.get());
 		return ResponseEntity.created(URI.create(result)).build();
+	}
+
+	@DeleteMapping("/posts/image/{id}")
+	public ResponseEntity<Object> deletePortfolioImage(@PathVariable Long id) {
+		Optional<Image> image = imageService.findById(id);
+		if (image.isEmpty()) {
+			return ResponseEntity.badRequest().body(
+				new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_IMAGE));
+		}
+		postService.deleteImage(image.get());
+		return ResponseEntity.noContent().build();
 	}
 }
