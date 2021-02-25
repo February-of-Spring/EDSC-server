@@ -41,8 +41,6 @@ public class PostService {
 				.title(postRequestDto.getTitle())
 				.content(postRequestDto.getContent())
 				.category(category)
-//				.images(postRequestDto.getImages())
-//				.files(postRequestDto.getFiles())
 				.build()
 		);
 		return post.getId().toString();
@@ -87,7 +85,9 @@ public class PostService {
 		post.updatePost(postRequestDto, category);
 	}
 
+	@Transactional
 	public void deletePost(Post post) {
+		post.getImages().forEach(this::deleteImage);
 		postRepository.delete(post);
 	}
 
@@ -143,5 +143,11 @@ public class PostService {
 			.upload(convertedFile, IMAGE_PATH, image.getId().toString());
 		image.updateImage(result);
 		return result;
+	}
+
+	@Transactional
+	public void deleteImage(Image image) {
+		s3Service.delete(IMAGE_PATH, image.getId().toString());
+		imageRepository.delete(image);
 	}
 }
