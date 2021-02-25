@@ -56,7 +56,6 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<File> files = new ArrayList<>();
 
-    //==연관관계 편의 메서드==//
     public void setUser(User user) {
         this.user = user;
         user.getPosts().add(this);
