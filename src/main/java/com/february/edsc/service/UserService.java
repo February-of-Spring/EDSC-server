@@ -13,6 +13,7 @@ import com.february.edsc.repository.PostRepository;
 import com.february.edsc.repository.UserJpaRepository;
 import com.february.edsc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,9 +60,9 @@ public class UserService {
     }
 
     @Transactional
-    public PostListResponseDto getUserPosts(Long userId) {
+    public PostListResponseDto getUserPosts(Long userId, Pageable pageable) {
         List<PostResponseDto> posts =
-            postRepository.findAllByUserId(userId).stream()
+            postRepository.findAllByUserId(userId, pageable).stream()
                 .map(Post::toPostResponseDto).collect(Collectors.toList());
         return PostListResponseDto.builder()
             .totalNum(posts.size())
@@ -70,9 +71,9 @@ public class UserService {
     }
 
     @Transactional
-    public PostListResponseDto getUserLikes(Long userId) {
+    public PostListResponseDto getUserLikes(Long userId, Pageable pageable) {
         List<PostResponseDto> posts =
-            likeRepository.findAllByUserId(userId).stream()
+            likeRepository.findAllByUserId(userId, pageable).stream()
             .map(Like::getPost).map(Post::toPostResponseDto)
             .collect(Collectors.toList());
         return PostListResponseDto.builder()
