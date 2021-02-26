@@ -7,6 +7,7 @@ import com.february.edsc.domain.user.UserUpdateDto;
 import com.february.edsc.service.S3Service;
 import com.february.edsc.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,21 +58,21 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/posts")
-	public ResponseEntity<Object> getUserPosts(@PathVariable Long id) {
+	public ResponseEntity<Object> getUserPosts(@PathVariable Long id, Pageable pageable) {
 		Optional<User> user = userService.findById(id);
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
-		} return ResponseEntity.ok().body(userService.getUserPosts(id));
+		} return ResponseEntity.ok().body(userService.getUserPosts(id, pageable));
 	}
 
 	@GetMapping("/users/{id}/likes")
-	public ResponseEntity<Object> getUserLikes(@PathVariable Long id) {
+	public ResponseEntity<Object> getUserLikes(@PathVariable Long id, Pageable pageable) {
 		Optional<User> user = userService.findById(id);
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
 				.body(new Error(HttpStatus.BAD_REQUEST, ErrorMessage.NO_SUCH_USER));
-		} return ResponseEntity.ok().body(userService.getUserLikes(id));
+		} return ResponseEntity.ok().body(userService.getUserLikes(id, pageable));
 	}
 
 	@PatchMapping("/users/{id}/image")
