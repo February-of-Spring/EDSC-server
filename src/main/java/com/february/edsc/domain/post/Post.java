@@ -11,7 +11,7 @@ import com.february.edsc.domain.user.User;
 import com.february.edsc.domain.user.like.LikeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -72,8 +72,8 @@ public class Post {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-        this.modifiedAt = new Timestamp(System.currentTimeMillis());
+        this.createdAt = new Timestamp(System.currentTimeMillis() + 32400000L);
+        this.modifiedAt = new Timestamp(System.currentTimeMillis() + 32400000L);
         this.category = category;
         this.images = images;
         this.files = files;
@@ -118,7 +118,7 @@ public class Post {
     public void updatePost(PostRequestDto postRequestDto, Category category) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.modifiedAt = new Timestamp(System.currentTimeMillis());
+        this.modifiedAt = new Timestamp(System.currentTimeMillis() + 32400000L);
         this.category = category;
     }
 

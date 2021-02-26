@@ -53,8 +53,8 @@ public class Comment {
     public Comment(String content, boolean isPublic, Post post, Comment parent, User user) {
         this.content = content;
         this.isPublic = isPublic;
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-        this.modifiedAt = new Timestamp(System.currentTimeMillis());
+        this.createdAt = new Timestamp(System.currentTimeMillis() + 32400000L);
+        this.modifiedAt = new Timestamp(System.currentTimeMillis() + 32400000L);
         this.post = post;
         this.parent = parent;
         this.user = user;
@@ -63,6 +63,7 @@ public class Comment {
     public void updateComment(CommentRequestDto commentRequestDto) {
         content = commentRequestDto.getContent();
         isPublic = commentRequestDto.getIsPublic();
+        modifiedAt = new Timestamp(System.currentTimeMillis() + 32400000L);
     }
 
     public CommentResponseDto toCommentResponseDto() {
