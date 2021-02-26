@@ -30,7 +30,7 @@ public class CategoryController {
 		return ResponseEntity.ok().body(categoryService.getCategories());
 	}
 
-	@GetMapping("/category/posts/level2")
+	@GetMapping("/category/level2name")
 	public ResponseEntity<Object> getLevel2CategoryNames() {
 		List<String> categories = categoryService.findAllByLevel(2)
 			.stream().map(Category::toCategoryChildResponseDto)
