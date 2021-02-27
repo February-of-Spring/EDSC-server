@@ -29,7 +29,8 @@ public class S3Service {
 
 	private final static List<String> IMAGE_EXTENSIONS = Arrays
 		.asList(".jpg", ".jpeg", ".gif", ".png", ".img", ".tiff", ".heif");
-	private final static String TEMP_FILE_PATH = "EDSC-server/src/main/resources/";
+//	private final static String TEMP_FILE_PATH = "src/main/resources/"; // local test
+	private final static String TEMP_FILE_PATH = "/home/ec2-user/app/EDSC-server/src/main/resources/";
 
 	public Optional<File> convert(MultipartFile file) throws IOException {
 		File convertFile = new File(TEMP_FILE_PATH + file.getOriginalFilename());
@@ -39,7 +40,7 @@ public class S3Service {
 			}
 			return Optional.of(convertFile);
 		}
-		return Optional.empty();
+		throw new IllegalArgumentException(("파일 변환이 실패했습니다."));
 	}
 
 	public String upload(File uploadFile, String dirName, String id) {
