@@ -58,7 +58,7 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/posts")
-	public ResponseEntity<Object> getUserPosts(@PathVariable Long id, Pageable pageable) {
+	public ResponseEntity<Object> getUserPosts(@PathVariable Long id, final Pageable pageable) {
 		Optional<User> user = userService.findById(id);
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/likes")
-	public ResponseEntity<Object> getUserLikes(@PathVariable Long id, Pageable pageable) {
+	public ResponseEntity<Object> getUserLikes(@PathVariable Long id, final Pageable pageable) {
 		Optional<User> user = userService.findById(id);
 		if (user.isEmpty()) {
 			return ResponseEntity.badRequest()
