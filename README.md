@@ -1,5 +1,7 @@
 # DSC Ewha board
-<img width="882" alt="스크린샷 2021-01-30 오후 3 30 50" src="https://user-images.githubusercontent.com/45806836/106349281-25383800-6310-11eb-9265-1906ec554501.png">
+
+<img width="686" alt="스크린샷 2021-03-04 오후 2 29 50" src="https://user-images.githubusercontent.com/45806836/109915940-15888680-7cf6-11eb-978e-77ab468340f7.png">
+
 
 ## 공개 주소 ✨ 
 
@@ -8,8 +10,6 @@
 &nbsp;
 
 ## 소개
-
-<img width="870" alt="스크린샷 2021-01-30 오후 3 29 28" src="https://user-images.githubusercontent.com/45806836/106349253-f326d600-630f-11eb-8ce0-61884bac5229.png">
 
 🌱 DSC Ewha 멤버분들을 위해 만든 게시판 프로젝트 입니다! 🌱 
 
